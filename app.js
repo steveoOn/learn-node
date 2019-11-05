@@ -1,5 +1,5 @@
 const yargs = require("yargs");
-const { addNote, removeNote } = require("./notes");
+const { addNote, removeNote, listNotes, readNote } = require("./notes");
 
 // yargs.version()
 
@@ -42,15 +42,22 @@ yargs.command({
   command: "list",
   describe: " 列出笔记",
   handler() {
-    console.log("列出所有笔记");
+    listNotes();
   }
 });
 
 yargs.command({
   command: "read",
   describe: "读取笔记",
-  handler() {
-    console.log("正在读取笔记");
+  builder: {
+    title: {
+      describe: "笔记标题",
+      demandOption: true,
+      type: "string"
+    }
+  },
+  handler(argv) {
+    readNote(argv.title);
   }
 });
 

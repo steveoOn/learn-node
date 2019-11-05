@@ -1,0 +1,10 @@
+{
+  "name": "learnNodeAsync",
+  "version": "1.0.0",
+  "main": "app.js",
+  "author": "siwen",
+  "license": "MIT",
+  "dependencies": {
+    "request": "^2.88.0"
+  }
+}

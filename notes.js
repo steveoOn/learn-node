@@ -1,14 +1,15 @@
 const fs = require("fs");
 const chalk = require("chalk");
 
-const getNotes = () => {
-  return "my notes...";
-};
-
 const addNote = (title, body) => {
   const notes = loadNotes();
-  const duplicateNotes = notes.filter(note => note.title === title);
-  if (duplicateNotes.length !== 0) {
+  // instead of using filter(), the find() method is immediately stop mapping
+  // when first matching title was found. upgrade capacity.
+
+  // const duplicateNotes = notes.filter(note => note.title === title);
+  const duplicateNote = notes.find(note => note.title === title);
+
+  if (duplicateNote) {
     console.log(chalk.red.inverse("Note title is taken!"));
   } else {
     notes.push({
@@ -31,6 +32,23 @@ const removeNote = title => {
   }
 };
 
+const listNotes = () => {
+  const notes = loadNotes();
+  console.log(chalk.inverse("Your notes is"));
+  notes.forEach(note => console.log(note.title));
+};
+
+const readNote = title => {
+  const notes = loadNotes();
+  const findOneNote = notes.find(note => note.title === title);
+  if (findOneNote) {
+    console.log(chalk.blue.bold("Title:"), findOneNote.title);
+    console.log(chalk.blue.bold("Body:"), findOneNote.body);
+  } else {
+    console.log(chalk.red.inverse("No note found!"));
+  }
+};
+
 const saveNotes = notes => {
   const dataJSON = JSON.stringify(notes);
   fs.writeFileSync("notes.json", dataJSON);
@@ -47,7 +65,8 @@ const loadNotes = () => {
 };
 
 module.exports = {
-  getNotes,
   addNote,
-  removeNote
+  removeNote,
+  listNotes,
+  readNote
 };
