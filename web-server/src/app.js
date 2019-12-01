@@ -10,11 +10,20 @@ const app = express();
 
 const publicPath = path.join(__dirname, "../public");
 
+const logger = (req, res, next) => {
+  if (req.params.id === 0) {
+    next("route");
+  } else {
+    next();
+  }
+};
+
 // setting up hbs view engine
 app.set("view engine", "hbs");
 
 // serve static html file
 app.use(express.static(publicPath));
+app.use(logger);
 
 // app.get("/help", (req, res) => {
 //   res.send({
@@ -23,9 +32,17 @@ app.use(express.static(publicPath));
 //   });
 // });
 
-// app.get("/about", (req, res) => {
+// app.get("/test", (req, res) => {
 //   res.send("<h1>About page</h1>");
 // });
+
+app.get("/test/:id", (req, res, next) => {
+  res.send(`the test id:<code>${req.params.id}</code>`);
+});
+
+app.get("test/:id", (req, res) => {
+  res.send("this is 0");
+});
 
 app.get("", (req, res) => {
   res.render("index", {
